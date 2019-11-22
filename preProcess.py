@@ -94,24 +94,24 @@ def processTweet(tweet):
     return new_tweet
 
 def removeDuplicates():
-    with open('bolsonaro.csv','r', encoding="utf-8") as f, open('bolsonaro_sem_repeticoes.csv','w', encoding="utf-8") as out_file:
+    with open('bolsonaro.csv','r', encoding="utf-8") as f, open('bolsonaro_cru.csv','w', encoding="utf-8") as out_file:
         out_file.writelines(unique_everseen(f))
 
 #-----------------------------------------------
 
-tweets = []
-processedTweets = []
+# tweets = []
+# processedTweets = []
 
-print('lendo arquivo e fazendo preprocessamento\n')
-with open('bolsonaro_sem_repeticoes.csv', encoding='utf-8') as csvfile:
-    readCSV = csv.reader(csvfile)
-    # i = 0
-    for row in readCSV:
-        processedTweets = processTweet(row[0])
-        tweets.append(processedTweets)
-        # print('r: ',i)
-        # i = i + 1
-print('preprocessamento terminado')
+# print('lendo arquivo e fazendo preprocessamento\n')
+# with open('bolsonaro_sem_repeticoes.csv', encoding='utf-8') as csvfile:
+#     readCSV = csv.reader(csvfile)
+#     # i = 0
+#     for row in readCSV:
+#         processedTweets = processTweet(row[0])
+#         tweets.append(processedTweets)
+#         # print('r: ',i)
+#         # i = i + 1
+# print('preprocessamento terminado')
 
 # quantidade_total = len(tweets)
 # qtd_treino = int(len(tweets) * 0.75)
@@ -127,15 +127,15 @@ print('preprocessamento terminado')
 # print('separação concluida')
 
 
-print('escrevendo treino\n')
-with open('bolsonaro_sem_repeticoes2.csv', mode='w', encoding='utf-8', newline='') as csvfile:
-    writeCSV = csv.writer(csvfile)
-    i = 0
-    while (i < len(tweets)):
-        writeCSV.writerow([tweets[i]])
-        # print('w: ',i)
-        i = i + 1
-print('treino escrito\n')
+# print('escrevendo treino\n')
+# with open('bolsonaro_sem_repeticoes2.csv', mode='w', encoding='utf-8', newline='') as csvfile:
+#     writeCSV = csv.writer(csvfile)
+#     i = 0
+#     while (i < len(tweets)):
+#         writeCSV.writerow([tweets[i]])
+#         # print('w: ',i)
+#         i = i + 1
+# print('treino escrito\n')
 
 # print('escrevendo teste\n')
 # with open('bolsonaro_teste2.csv', mode='w', encoding='utf-8', newline='') as csvfile:
