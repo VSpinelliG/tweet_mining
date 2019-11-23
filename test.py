@@ -1,25 +1,22 @@
 import tweepy
-from textblob import TextBlob
 import re
 import csv
-
+from textblob import TextBlob
+from googletrans import Translator
 
 def sentiment_analiser(tweet):
-    if tweet.find('bolsominion') != -1:
-        sentimento = '0'
-    elif tweet.find('bolsomito') != -1:
-        sentimento = '1'
-    else:
-        blob = TextBlob(tweet)
-        if blob.detect_language() != 'en':
-            tweet = TextBlob(str(blob.translate(to='en')))
+    translator = Translator()
+    print(tweet)
+    tweet = translator.translate(tweet, dest='en')
+    print(tweet.text)
+    tweet = TextBlob(tweet.text)
 
-        if tweet.polarity > 0:
-            sentimento = '1'
-        elif tweet.polarity < 0:
-            sentimento = '0'
-        else:
-            sentimento = '0.5'
+    if tweet.polarity > 0:
+        sentimento = '1'
+    elif tweet.polarity < 0:
+        sentimento = '0'
+    else:
+        sentimento = '0.5'
 
     return tweet + '\t' + sentimento
     
@@ -28,14 +25,14 @@ tweets = []
 print('lendo arquivo e fazendo preprocessamento\n')
 with open('bolsonaro_colocar_sentimento.csv', encoding='utf-8') as csvfile:
     readCSV = csv.reader(csvfile)
-    i = 0
     for row in readCSV:
-        if i != 0:
+        try:
             tweet_com_sentimento = sentiment_analiser(row[0])
-            tweets.append(tweet_com_sentimento)
-        i = i +1
+        except Exception as e:
+            print(str(e))
+            continue
+        tweets.append(tweet_com_sentimento)
 print('preprocessamento terminado')
-print(i)
 
 print('escrevendo treino\n')
 with open('bolsonaro_com_sentimento.csv', mode='w', encoding='utf-8', newline='') as csvfile:
@@ -45,6 +42,8 @@ with open('bolsonaro_com_sentimento.csv', mode='w', encoding='utf-8', newline=''
         writeCSV.writerow([tweets[i]])
         i = i + 1
 print('treino escrito\n')
+
+
 
 # import csv
 # import nltk #Natural Language Processing
