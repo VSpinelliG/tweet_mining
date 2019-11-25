@@ -1,138 +1,119 @@
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.naive_bayes import BernoulliNB
+import time
+import tweepy
+import re
 import csv
+from textblob import TextBlob
+from translate import Translator
+#from googletrans import Translator
 
-def exibir_resultado(valor):
-    frase, resultado = valor
-    resultado = "Frase positiva" if resultado[0] == '1' else "Frase negativa"
-    print(frase, ":", resultado)
+def sentiment_analiser(tweet):
+    #translator = Translator(to_lang="en")
+    #print(tweet)
+    #en_tweet = translator.translate(tweet)
+    # print(tweet.text)
+    # en_tweet = TextBlob(en_tweet.text)
 
-def analisar_frase(classificador, vetorizador, frase):
-    return frase, classificador.predict(vetorizador.transform([frase]))
-
-def obter_dados_das_fontes():
-    dados = []
-    print('lendo arquivo e fazendo preprocessamento\n')
-    with open('bolsonaro_sem_repeticoes2.csv', encoding='utf-8') as csvfile:
-        readCSV = csv.reader(csvfile)
-        i = 0
-        for row in readCSV:
-            if i != 0:
-                dados.append(row[0])
-            i = i + 1
-    print('preprocessamento terminado')
-
-    return dados
-#     diretorio_base = "C:\\Users\\re035148\\Documents\\I.A\\sentiment labelled sentences\\"
-
-#     with open(diretorio_base + "imdb_labelled.txt", "r") as arquivo_texto:
-#         dados = arquivo_texto.read().split('\n')
-         
-#     with open(diretorio_base + "amazon_cells_labelled.txt", "r") as arquivo_texto:
-#         dados += arquivo_texto.read().split('\n')
-
-#     with open(diretorio_base + "yelp_labelled.txt", "r") as arquivo_texto:
-#         dados += arquivo_texto.read().split('\n')
-
-#     return dados
-
-def tratamento_dos_dados(dados):
-    dados_tratados = []
-    for dado in dados:
-        aux = [dado, '0']
-        dados_tratados.append(aux)
-
-    return dados_tratados
-
-def dividir_dados_para_treino_e_validacao(dados):
-    quantidade_total = len(dados)
-    percentual_para_treino = 0.75
-    treino = []
-    validacao = []
-
-    for indice in range(0, quantidade_total):
-        if indice < quantidade_total * percentual_para_treino:
-            treino.append(dados[indice])
-        else:
-            validacao.append(dados[indice])
-
-    return treino, validacao
-
-def pre_processamento():
-    dados = obter_dados_das_fontes()
-    dados_tratados = tratamento_dos_dados(dados)
-
-    return dividir_dados_para_treino_e_validacao(dados_tratados)
+    translator= Translator(from_lang="pt", to_lang="en")
+    en_tweet = translator.translate(tweet)
+    en_tweet = TextBlob(en_tweet)
 
 
-def realizar_treinamento(registros_de_treino, vetorizador):
-    treino_comentarios = [registro_treino[0] for registro_treino in registros_de_treino]
-    treino_respostas = [registro_treino[1] for registro_treino in registros_de_treino]
+    if en_tweet.polarity > 0:
+        sentimento = '1'
+    elif en_tweet.polarity < 0:
+        sentimento = '0'
+    else:
+        sentimento = '0.5'
 
-    treino_comentarios = vetorizador.fit_transform(treino_comentarios)
+    return tweet + '\t' + sentimento
+    
 
-    return BernoulliNB().fit(treino_comentarios, treino_respostas)
+tweets = []
+print('lendo arquivo e fazendo preprocessamento\n')
+with open('neymar_sem_repeticoes2.csv', encoding='utf-8') as csvfile:
+    readCSV = csv.reader(csvfile)
+    i = 0
+    for row in readCSV:
+        if i % 400 == 0 and i != 0:
+            time.sleep(60)
+        aux = ' '.join(row)
+        #translator = Translator()
+        #en_tweet = translator.translate(aux, dest='en')
+        tweet_com_sentimento = sentiment_analiser(aux)
+        tweets.append(tweet_com_sentimento)
+        print(i)
+        i = i + 1
+print('preprocessamento terminado')
 
-def realizar_avaliacao_simples(registros_para_avaliacao):
-    avaliacao_comentarios = [registro_avaliacao[0] for registro_avaliacao in registros_para_avaliacao]
-    avaliacao_respostas   = [registro_avaliacao[1] for registro_avaliacao in registros_para_avaliacao]
 
-    total = len(avaliacao_comentarios)
-    acertos = 0
-    for indice in range(0, total):
-        resultado_analise = analisar_frase(classificador, vetorizador, avaliacao_comentarios[indice])
-        frase, resultado = resultado_analise
-        acertos += 1 if resultado[0] == avaliacao_respostas[indice] else 0
+print('escrevendo treino\n')
+with open('neymar_sem_repeticoes3.csv', mode='w', encoding='utf-8', newline='') as csvfile:
+    writeCSV = csv.writer(csvfile)
+    i = 0
+    while (i < len(tweets)):
+        writeCSV.writerow([tweets[i]])
+        i = i + 1
+print('treino escrito\n')
 
-    return acertos * 100 / total
 
-def realizar_avaliacao_completa(registros_para_avaliacao):
-    avaliacao_comentarios = [registro_avaliacao[0] for registro_avaliacao in registros_para_avaliacao]
-    avaliacao_respostas   = [registro_avaliacao[1] for registro_avaliacao in registros_para_avaliacao]
+# tweet = 'Eu te amo'
+# translator = Translator()
+# print(tweet)
+# en_tweet = translator.translate(tweet, dest='en')
+# print(en_tweet.text)
 
-    total = len(avaliacao_comentarios)
-    verdadeiros_positivos = 0
-    verdadeiros_negativos = 0
-    falsos_positivos = 0
-    falsos_negativos = 0
+# import csv
+# import nltk #Natural Language Processing
+# import re #Python's regular expression
+# from nltk.tokenize import word_tokenize 
+# from string import punctuation 
+# from nltk.corpus import stopwords
+# from more_itertools import unique_everseen
+# import emoji        
 
-    for indice in range(0, total):
-        resultado_analise = analisar_frase(classificador, vetorizador, avaliacao_comentarios[indice])
-        frase, resultado = resultado_analise
-        if resultado[0] == '0':
-            verdadeiros_negativos += 1 if avaliacao_respostas[indice] == '0' else 0
-            falsos_negativos += 1 if avaliacao_respostas[indice] != '0' else 0
-        else:
-            verdadeiros_positivos += 1 if avaliacao_respostas[indice] == '1' else 0
-            falsos_positivos += 1 if avaliacao_respostas[indice] != '1' else 0
 
-    return ( verdadeiros_positivos * 100 / total, 
-             verdadeiros_negativos * 100 / total,
-             falsos_positivos * 100 / total,
-             falsos_negativos * 100 / total
-           )
 
-registros_de_treino, registros_para_avaliacao = pre_processamento()
-vetorizador = CountVectorizer(binary = 'true')
-classificador = realizar_treinamento(registros_de_treino, vetorizador)
+# tweets = []
+# all_words = []
+# tweet = []
+# i = 0
+# print('lendo\n')
+# with open('bolsonaro_treino2.csv', mode='r', encoding='utf-8') as csvfile:
+#     readCSV = csv.reader(csvfile)
+#     for row in readCSV:
+#         tweets.append(row[0])
+#         tweet = word_tokenize(row[0])
+#         for word in tweet:
+#             all_words.append(word)
 
-exibir_resultado( analisar_frase(classificador, vetorizador,"this is the best movie"))
-exibir_resultado( analisar_frase(classificador, vetorizador,"this is the worst movie"))
-exibir_resultado( analisar_frase(classificador, vetorizador,"awesome!"))
-exibir_resultado( analisar_frase(classificador, vetorizador,"10/10"))
-exibir_resultado( analisar_frase(classificador, vetorizador,"so bad"))
+# def extract_features(tweet):
+#     tweet_words=set(tweet)
+#     features={}
+#     for word in word_features:
+#         features['contains(%s)' % word]=(word in tweet_words)
+#     return features 
 
-percentual_acerto = realizar_avaliacao_simples(registros_para_avaliacao)
-informacoes_analise = realizar_avaliacao_completa(registros_para_avaliacao)
+# print('montando palavras')
+# wordlist = nltk.FreqDist(all_words)
+# word_features = wordlist.keys()
 
-verdadeiros_positivos,verdadeiros_negativos,falsos_positivos,falsos_negativos = informacoes_analise
+# print('treinando')
+# trainingFeatures=nltk.classify.apply_features(extract_features,tweets)
 
-print("O modelo teve uma taxa de acerto de", percentual_acerto, "%")
+# print(trainingFeatures)
 
-print("Onde", verdadeiros_positivos, "% são verdadeiros positivos")
-print("e", verdadeiros_negativos, "% são verdadeiros negativos")
+# NBayesClassifier=nltk.NaiveBayesClassifier.train(trainingFeatures)
 
-print("e", falsos_positivos, "% são falsos positivos")
-print("e", falsos_negativos, "% são falsos negativos")
+# print('label')
 
+# NBResultLabels = [NBayesClassifier.classify(extract_features(tweet[0])) for tweet in tweets]
+
+
+# print('analisando resultado')
+# if NBResultLabels.count('positive') > NBResultLabels.count('negative'):
+#     print("Overall Positive Sentiment")
+#     print("Positive Sentiment Percentage = " + str(100*NBResultLabels.count('positive')/len(NBResultLabels)) + "%")
+# else: 
+#     print("Overall Negative Sentiment")
+#     print("Negative Sentiment Percentage = " + str(100*NBResultLabels.count('negative')/len(NBResultLabels)) + "%")
 

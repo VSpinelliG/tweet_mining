@@ -86,31 +86,34 @@ def processTweet(tweet):
     tweet = re.sub(':[^\s]*:+', '', tweet) #remove emoji 
     
     tweet = ' '.join(tweet.split())
-    tweet = word_tokenize(tweet)
-    tweet = [word for word in tweet if word not in stopwords]
-    new_tweet = ''
-    for word in tweet:
-        new_tweet = new_tweet + word + ' '
-    return new_tweet
+    # tweet = word_tokenize(tweet)
+    # tweet = [word for word in tweet if word not in stopwords]
+    # new_tweet = ''
+    # for word in tweet:
+    #     new_tweet = new_tweet + word + ' '
+    return tweet
 
 def removeDuplicates():
-    with open('bolsonaro.csv','r', encoding="utf-8") as f, open('bolsonaro_cru.csv','w', encoding="utf-8") as out_file:
+    with open('neymar_sem_repeticoes2.csv','r', encoding="utf-8") as f, open('neymar_sem_repeticoes3.csv','w', encoding="utf-8") as out_file:
         out_file.writelines(unique_everseen(f))
 
+removeDuplicates()
 #-----------------------------------------------
 
 # tweets = []
 # processedTweets = []
 
 # print('lendo arquivo e fazendo preprocessamento\n')
-# with open('bolsonaro_sem_repeticoes.csv', encoding='utf-8') as csvfile:
+# with open('neymar_sem_repeticoes.csv', encoding='utf-8') as csvfile:
 #     readCSV = csv.reader(csvfile)
-#     # i = 0
+#     i = 0
 #     for row in readCSV:
-#         processedTweets = processTweet(row[0])
-#         tweets.append(processedTweets)
+#         if i != 0:
+#             aux = ' '.join(row)
+#             processedTweets = processTweet(aux)
+#             tweets.append(processedTweets)
 #         # print('r: ',i)
-#         # i = i + 1
+#         i = i + 1
 # print('preprocessamento terminado')
 
 # quantidade_total = len(tweets)
@@ -127,22 +130,12 @@ def removeDuplicates():
 # print('separação concluida')
 
 
-# print('escrevendo treino\n')
-# with open('bolsonaro_sem_repeticoes2.csv', mode='w', encoding='utf-8', newline='') as csvfile:
+# print('escrevendo\n')
+# with open('neymar_sem_repeticoes.csv', mode='w', encoding='utf-8', newline='') as csvfile:
 #     writeCSV = csv.writer(csvfile)
 #     i = 0
 #     while (i < len(tweets)):
 #         writeCSV.writerow([tweets[i]])
 #         # print('w: ',i)
 #         i = i + 1
-# print('treino escrito\n')
-
-# print('escrevendo teste\n')
-# with open('bolsonaro_teste2.csv', mode='w', encoding='utf-8', newline='') as csvfile:
-#     writeCSV = csv.writer(csvfile)
-#     i = 0
-#     while (i < len(tweets_teste)):
-#         writeCSV.writerow([tweets_teste[i], 'neutro'])
-#         # print('w: ',i)
-#         i = i + 1
-# print('teste escrito\n')
+# print('escrito\n')
