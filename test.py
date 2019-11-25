@@ -1,14 +1,15 @@
+import time
 import tweepy
 import re
 import csv
 from textblob import TextBlob
-# from translate import Translator
-from googletrans import Translator
+from translate import Translator
+#from googletrans import Translator
 
 def sentiment_analiser(tweet):
-    translator = Translator(to_lang="en")
-    print(tweet)
-    en_tweet = translator.translate(tweet)
+    #translator = Translator(to_lang="en")
+    #print(tweet)
+    #en_tweet = translator.translate(tweet)
     # print(tweet.text)
     # en_tweet = TextBlob(en_tweet.text)
 
@@ -33,11 +34,13 @@ with open('bolsonaro_colocar_sentimento2.csv', encoding='utf-8') as csvfile:
     readCSV = csv.reader(csvfile)
     i = 0
     for row in readCSV:
+        if i % 400 == 0 and i != 0:
+            time.sleep(120)
         aux = ' '.join(row)
-        translator = Translator()
-        en_tweet = translator.translate(aux, dest='en')
-        # tweet_com_sentimento = sentiment_analiser(aux)
-        tweets.append(aux)
+        #translator = Translator()
+        #en_tweet = translator.translate(aux, dest='en')
+        tweet_com_sentimento = sentiment_analiser(aux)
+        tweets.append(tweet_com_sentimento)
         print(i)
         i = i + 1
 print('preprocessamento terminado')
