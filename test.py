@@ -35,7 +35,7 @@ with open('bolsonaro_colocar_sentimento2.csv', encoding='utf-8') as csvfile:
     i = 0
     for row in readCSV:
         if i % 400 == 0 and i != 0:
-            time.sleep(60)
+            time.sleep(30)
         aux = ' '.join(row)
         #translator = Translator()
         #en_tweet = translator.translate(aux, dest='en')
@@ -47,7 +47,7 @@ print('preprocessamento terminado')
 
 
 print('escrevendo treino\n')
-with open('bolsonaro_colocar_sentimento3.csv', mode='w', encoding='utf-8', newline='') as csvfile:
+with open('bolsonaro_colocar_sentimento21.csv', mode='w', encoding='utf-8', newline='') as csvfile:
     writeCSV = csv.writer(csvfile)
     i = 0
     while (i < len(tweets)):

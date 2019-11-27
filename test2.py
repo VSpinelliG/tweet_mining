@@ -30,12 +30,12 @@ def sentiment_analiser(tweet):
 
 tweets = []
 print('lendo arquivo e fazendo preprocessamento\n')
-with open('neymar_sem_repeticoes2.csv', encoding='utf-8') as csvfile:
+with open('bolsonaro_colocar_sentimento3.csv', encoding='utf-8') as csvfile:
     readCSV = csv.reader(csvfile)
     i = 0
     for row in readCSV:
         if i % 400 == 0 and i != 0:
-            time.sleep(60)
+            time.sleep(30)
         aux = ' '.join(row)
         #translator = Translator()
         #en_tweet = translator.translate(aux, dest='en')
@@ -47,7 +47,7 @@ print('preprocessamento terminado')
 
 
 print('escrevendo treino\n')
-with open('neymar_sem_repeticoes3.csv', mode='w', encoding='utf-8', newline='') as csvfile:
+with open('bolsonaro_colocar_sentimento31.csv', mode='w', encoding='utf-8', newline='') as csvfile:
     writeCSV = csv.writer(csvfile)
     i = 0
     while (i < len(tweets)):

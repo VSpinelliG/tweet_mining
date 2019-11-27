@@ -94,7 +94,7 @@ def processTweet(tweet):
     return tweet
 
 def removeDuplicates():
-    with open('neymar_sem_repeticoes2.csv','r', encoding="utf-8") as f, open('neymar_sem_repeticoes3.csv','w', encoding="utf-8") as out_file:
+    with open('bolsonaro_colocar_sentimento3.csv','r', encoding="utf-8") as f, open('bolsonaro_colocar_sentimento2.csv','w', encoding="utf-8") as out_file:
         out_file.writelines(unique_everseen(f))
 
 removeDuplicates()
