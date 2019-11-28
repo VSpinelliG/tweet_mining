@@ -39,8 +39,9 @@ def obter_dados_das_fontes():
 def tratamento_dos_dados(dados):
     dados_tratados = []
     for dado in dados:
-        aux = [dado, '0']
-        dados_tratados.append(aux)
+        dado = dado.split('\t')
+        print(dado)
+        
 
     return dados_tratados
 

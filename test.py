@@ -28,33 +28,37 @@ def sentiment_analiser(tweet):
     return tweet + '\t' + sentimento
     
 
-tweets = []
-print('lendo arquivo e fazendo preprocessamento\n')
-with open('bolsonaro_colocar_sentimento2.csv', encoding='utf-8') as csvfile:
-    readCSV = csv.reader(csvfile)
-    i = 0
-    for row in readCSV:
-        if i % 400 == 0 and i != 0:
-            time.sleep(30)
-        aux = ' '.join(row)
-        #translator = Translator()
-        #en_tweet = translator.translate(aux, dest='en')
-        tweet_com_sentimento = sentiment_analiser(aux)
-        tweets.append(tweet_com_sentimento)
-        print(i)
-        i = i + 1
-print('preprocessamento terminado')
+# tweets = []
+# print('lendo arquivo e fazendo preprocessamento\n')
+# with open('bolsonaro_colocar_sentimento2.csv', encoding='utf-8') as csvfile:
+#     readCSV = csv.reader(csvfile)
+#     i = 0
+#     for row in readCSV:
+#         if i % 400 == 0 and i != 0:
+#             time.sleep(30)
+#         aux = ' '.join(row)
+#         #translator = Translator()
+#         #en_tweet = translator.translate(aux, dest='en')
+#         tweet_com_sentimento = sentiment_analiser(aux)
+#         tweets.append(tweet_com_sentimento)
+#         print(i)
+#         i = i + 1
+# print('preprocessamento terminado')
 
 
-print('escrevendo treino\n')
-with open('bolsonaro_colocar_sentimento21.csv', mode='w', encoding='utf-8', newline='') as csvfile:
-    writeCSV = csv.writer(csvfile)
-    i = 0
-    while (i < len(tweets)):
-        writeCSV.writerow([tweets[i]])
-        i = i + 1
-print('treino escrito\n')
+# print('escrevendo treino\n')
+# with open('bolsonaro_colocar_sentimento21.csv', mode='w', encoding='utf-8', newline='') as csvfile:
+#     writeCSV = csv.writer(csvfile)
+#     i = 0
+#     while (i < len(tweets)):
+#         writeCSV.writerow([tweets[i]])
+#         i = i + 1
+# print('treino escrito\n')
 
+
+a = 'saiba como acompanhar o discurso do presidente jair bolsonaro na onu    0.5'
+a = a.split('\t')
+print(a)
 
 # tweet = 'Eu te amo'
 # translator = Translator()
