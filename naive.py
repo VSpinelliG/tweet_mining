@@ -117,7 +117,7 @@ registros_de_treino, registros_para_avaliacao = pre_processamento()
 vetorizador = CountVectorizer(binary = 'true')
 classificador = realizar_treinamento(registros_de_treino, vetorizador)
 
-exibir_resultado( analisar_frase(classificador, vetorizador,"this is the best movie"))
+exibir_resultado( analisar_frase(classificador, vetorizador,"Esse é o melhor filme"))
 exibir_resultado( analisar_frase(classificador, vetorizador,"this is the worst movie"))
 exibir_resultado( analisar_frase(classificador, vetorizador,"awesome!"))
 exibir_resultado( analisar_frase(classificador, vetorizador,"10/10"))
