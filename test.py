@@ -56,7 +56,8 @@ def sentiment_analiser(tweet):
 # print('treino escrito\n')
 
 
-a = 'saiba como acompanhar o discurso do presidente jair bolsonaro na onu    0.5'
+a = 'saiba como acompanhar o discurso do presidente jair bolsonaro na onu\t0.5'
+print(a)
 a = a.split('\t')
 print(a)
 

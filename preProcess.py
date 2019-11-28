@@ -86,35 +86,31 @@ def processTweet(tweet):
     tweet = re.sub(':[^\s]*:+', '', tweet) #remove emoji 
     
     tweet = ' '.join(tweet.split())
-    # tweet = word_tokenize(tweet)
-    # tweet = [word for word in tweet if word not in stopwords]
-    # new_tweet = ''
-    # for word in tweet:
-    #     new_tweet = new_tweet + word + ' '
-    return tweet
+    tweet = word_tokenize(tweet)
+    tweet = [word for word in tweet if word not in stopwords]
+    new_tweet = ''
+    for word in tweet:
+        new_tweet = new_tweet + word + ' '
+    return new_tweet
 
 def removeDuplicates():
     with open('bolsonaro_colocar_sentimento3.csv','r', encoding="utf-8") as f, open('bolsonaro_colocar_sentimento2.csv','w', encoding="utf-8") as out_file:
         out_file.writelines(unique_everseen(f))
 
-removeDuplicates()
+# removeDuplicates()
 #-----------------------------------------------
 
-# tweets = []
+tweets = []
 # processedTweets = []
 
-# print('lendo arquivo e fazendo preprocessamento\n')
-# with open('neymar_sem_repeticoes.csv', encoding='utf-8') as csvfile:
-#     readCSV = csv.reader(csvfile)
-#     i = 0
-#     for row in readCSV:
-#         if i != 0:
-#             aux = ' '.join(row)
-#             processedTweets = processTweet(aux)
-#             tweets.append(processedTweets)
-#         # print('r: ',i)
-#         i = i + 1
-# print('preprocessamento terminado')
+print('lendo arquivo e fazendo preprocessamento\n')
+with open('bolsonaro_colocar_sentimento2.csv', encoding='utf-8') as csvfile:
+    readCSV = csv.reader(csvfile)
+    for row in readCSV:
+        aux = ' '.join(row)
+        processedTweets = processTweet(aux)
+        tweets.append(processedTweets)
+print('preprocessamento terminado')
 
 # quantidade_total = len(tweets)
 # qtd_treino = int(len(tweets) * 0.75)
@@ -130,12 +126,12 @@ removeDuplicates()
 # print('separação concluida')
 
 
-# print('escrevendo\n')
-# with open('neymar_sem_repeticoes.csv', mode='w', encoding='utf-8', newline='') as csvfile:
-#     writeCSV = csv.writer(csvfile)
-#     i = 0
-#     while (i < len(tweets)):
-#         writeCSV.writerow([tweets[i]])
-#         # print('w: ',i)
-#         i = i + 1
-# print('escrito\n')
+print('escrevendo\n')
+with open('bolsonaro_colocar_sentimento.csv', mode='w', encoding='utf-8', newline='') as csvfile:
+    writeCSV = csv.writer(csvfile)
+    i = 0
+    while (i < len(tweets)):
+        writeCSV.writerow([tweets[i]])
+        # print('w: ',i)
+        i = i + 1
+print('escrito\n')
