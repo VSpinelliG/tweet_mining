@@ -28,23 +28,22 @@ def sentiment_analiser(tweet):
     
 tweets = []
 print('lendo arquivo e fazendo preprocessamento\n')
-with open('b.csv', encoding='utf-8') as csvfile:
+with open('bolsonaro_teste2.csv', encoding='utf-8') as csvfile:
     readCSV = csv.reader(csvfile)
     i = 0
     for row in readCSV:
-        # print(i)
         aux = ' '.join(row)
-        aux = aux.split('    ')
-        tweets.append(aux)
-        # tweets.append(sentiment_analiser(aux))
+        # if aux.find('    ') != -1:
+        #     tweets.append(aux)
+        tweets.append(sentiment_analiser(aux))
         i = i + 1
 print('preprocessamento terminado')
 
 print('escrevendo treino\n')
-with open('c.csv', mode='w', encoding='utf-8', newline='') as csvfile:
+with open('a.csv', mode='w', encoding='utf-8', newline='') as csvfile:
     writeCSV = csv.writer(csvfile)
     i = 0
     while (i < len(tweets)):
-        writeCSV.writerow([tweets[i][0], tweets[i][1]])
+        writeCSV.writerow([tweets[i]])
         i = i + 1
 print('treino escrito\n')

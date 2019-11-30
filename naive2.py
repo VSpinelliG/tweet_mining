@@ -9,7 +9,7 @@ from sklearn.model_selection import cross_val_predict
 dataset = pd.read_csv('tweets-mg.csv')
 dataset.count()
 
-dataset = pd.read_csv('c.csv')
+dataset = pd.read_csv('c1.csv')
 tweets = []
 classes = []
 for text,sentiment in dataset.values:

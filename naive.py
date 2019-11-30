@@ -13,7 +13,7 @@ def analisar_frase(classificador, vetorizador, frase):
 def obter_dados_das_fontes():
     dados = []
     print('lendo arquivo e fazendo preprocessamento\n')
-    with open('bolsonaro_colocar_sentimento.csv', encoding='utf-8') as csvfile:
+    with open('c.csv', encoding='utf-8') as csvfile:
         readCSV = csv.reader(csvfile)
         for row in readCSV:
             dados.append(row[0])
