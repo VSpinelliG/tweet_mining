@@ -2,12 +2,14 @@ import nltk
 import re
 import csv
 import emoji
+from unicodedata import normalize
 from nltk.tokenize import word_tokenize
 from string import punctuation 
 from nltk.corpus import stopwords 
 from more_itertools import unique_everseen
 
-stopwords = set(stopwords.words('portuguese') + list(punctuation))
+# stopwords = set(stopwords.words('portuguese') + list(punctuation))
+stopwords = set(list(punctuation))
 
 def load_dict_smileys():
     
@@ -72,18 +74,19 @@ def load_dict_smileys():
 
 def processTweet(tweet):
     tweet = tweet.lower() # convert text to lower-case
-    tweet = re.sub('((www\.[^\s]+)|(https?://[^\s]+))', '', tweet) # remove URLs
-    tweet = re.sub('@[^\s]+', '', tweet) # remove usernames
-    tweet = re.sub(r'#([^\s]+)', r'\1', tweet) # remove the # in #hashtag
-    tweet = re.sub('kk+k*', '', tweet) # remove risada (kkk)
+    # tweet = re.sub('((www\.[^\s]+)|(https?://[^\s]+))', '', tweet) # remove URLs
+    # tweet = re.sub('@[^\s]+', '', tweet) # remove usernames
+    # # tweet = re.sub(r'#([^\s]+)', r'\1', tweet) # remove the # in #hashtag
+    # tweet = re.sub('#([^\s]+)', '', tweet) # remove the # in #hashtag
+    # tweet = re.sub('kk+k*', '', tweet) # remove risada (kkk)
     
-    SMILEY = load_dict_smileys()  
-    words = tweet.split()
-    reformed = [SMILEY[word] if word in SMILEY else word for word in words]
-    tweet = " ".join(reformed)
-    tweet = emoji.demojize(tweet)
-    # tweet = tweet.replace(":"," ")
-    tweet = re.sub(':[^\s]*:+', '', tweet) #remove emoji 
+    # SMILEY = load_dict_smileys()  
+    # words = tweet.split()
+    # reformed = [SMILEY[word] if word in SMILEY else word for word in words]
+    # tweet = " ".join(reformed)
+    # tweet = emoji.demojize(tweet)
+    # # tweet = tweet.replace(":"," ")
+    # tweet = re.sub(':[^\s]*:+', '', tweet) #remove emoji 
     
     tweet = ' '.join(tweet.split())
     tweet = word_tokenize(tweet)
@@ -92,9 +95,10 @@ def processTweet(tweet):
     for word in tweet:
         new_tweet = new_tweet + word + ' '
     return new_tweet
+    # return tweet
 
 def removeDuplicates():
-    with open('bolsonaro_colocar_sentimento3.csv','r', encoding="utf-8") as f, open('bolsonaro_colocar_sentimento2.csv','w', encoding="utf-8") as out_file:
+    with open('bolsonaro_teste2.csv','r', encoding="utf-8") as f, open('bolsonaro_teste.csv','w', encoding="utf-8") as out_file:
         out_file.writelines(unique_everseen(f))
 
 # removeDuplicates()
@@ -104,13 +108,16 @@ tweets = []
 # processedTweets = []
 
 print('lendo arquivo e fazendo preprocessamento\n')
-with open('bolsonaro_colocar_sentimento2.csv', encoding='utf-8') as csvfile:
+with open('bolsonaro_teste2.csv', encoding='utf-8') as csvfile:
     readCSV = csv.reader(csvfile)
     for row in readCSV:
         aux = ' '.join(row)
-        processedTweets = processTweet(aux)
-        tweets.append(processedTweets)
+        if len(aux) > 25:
+            tweets.append(' '.join(aux.split()))
+            # tweets.append(normalize('NFKD', aux).encode('ASCII', 'ignore').decode('ASCII'))
 print('preprocessamento terminado')
+
+# print(len(tweets))
 
 # quantidade_total = len(tweets)
 # qtd_treino = int(len(tweets) * 0.75)
@@ -127,7 +134,7 @@ print('preprocessamento terminado')
 
 
 print('escrevendo\n')
-with open('bolsonaro_colocar_sentimento.csv', mode='w', encoding='utf-8', newline='') as csvfile:
+with open('bolsonaro_teste2.csv', mode='w', encoding='utf-8', newline='') as csvfile:
     writeCSV = csv.writer(csvfile)
     i = 0
     while (i < len(tweets)):

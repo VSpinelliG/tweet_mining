@@ -13,112 +13,36 @@ def sentiment_analiser(tweet):
     # print(tweet.text)
     # en_tweet = TextBlob(en_tweet.text)
 
-    translator= Translator(from_lang="pt", to_lang="en")
-    en_tweet = translator.translate(tweet)
-    en_tweet = TextBlob(en_tweet)
+    # translator= Translator(from_lang="pt", to_lang="en")
+    # en_tweet = translator.translate(tweet)
+    # en_tweet = TextBlob(en_tweet)
 
-
-    if en_tweet.polarity > 0:
+    if (tweet.find('esquerda') or tweet.find('esquerdopata') or tweet.find('luladrao') or tweet.find('bolsomito') or tweet.find('globolixo') or tweet.find('mito') or tweet.find('capitao') or tweet.find('2022') or tweet.find('2026') or tweet.find('petista') or tweet.find('lula ta preso') or tweet.find('comunista')) != -1:
         sentimento = '1'
-    elif en_tweet.polarity < 0:
+    elif tweet.find('bolsonaro vai tomar no') != -1 or tweet.find('bolsominion') != -1 or tweet.find('gado') != -1!= -1 or tweet.find('cidadao de bem') != -1 or tweet.find('reaça') != -1 or tweet.find('laranja') != -1:
         sentimento = '0'
     else:
-        sentimento = '0.5'
+        return tweet
 
-    return tweet + '\t' + sentimento
+    return tweet + '    ' + sentimento
     
+tweets = []
+print('lendo arquivo e fazendo preprocessamento\n')
+with open('bolsonaro_teste2.csv', encoding='utf-8') as csvfile:
+    readCSV = csv.reader(csvfile)
+    i = 0
+    for row in readCSV:
+        # print(i)
+        aux = ' '.join(row)
+        tweets.append(sentiment_analiser(aux))
+        i = i + 1
+print('preprocessamento terminado')
 
-# tweets = []
-# print('lendo arquivo e fazendo preprocessamento\n')
-# with open('bolsonaro_colocar_sentimento2.csv', encoding='utf-8') as csvfile:
-#     readCSV = csv.reader(csvfile)
-#     i = 0
-#     for row in readCSV:
-#         if i % 400 == 0 and i != 0:
-#             time.sleep(30)
-#         aux = ' '.join(row)
-#         #translator = Translator()
-#         #en_tweet = translator.translate(aux, dest='en')
-#         tweet_com_sentimento = sentiment_analiser(aux)
-#         tweets.append(tweet_com_sentimento)
-#         print(i)
-#         i = i + 1
-# print('preprocessamento terminado')
-
-
-# print('escrevendo treino\n')
-# with open('bolsonaro_colocar_sentimento21.csv', mode='w', encoding='utf-8', newline='') as csvfile:
-#     writeCSV = csv.writer(csvfile)
-#     i = 0
-#     while (i < len(tweets)):
-#         writeCSV.writerow([tweets[i]])
-#         i = i + 1
-# print('treino escrito\n')
-
-
-a = 'saiba como acompanhar o discurso do presidente jair bolsonaro na onu\t0.5'
-print(a)
-a = a.split('\t')
-print(a)
-
-# tweet = 'Eu te amo'
-# translator = Translator()
-# print(tweet)
-# en_tweet = translator.translate(tweet, dest='en')
-# print(en_tweet.text)
-
-# import csv
-# import nltk #Natural Language Processing
-# import re #Python's regular expression
-# from nltk.tokenize import word_tokenize 
-# from string import punctuation 
-# from nltk.corpus import stopwords
-# from more_itertools import unique_everseen
-# import emoji        
-
-
-
-# tweets = []
-# all_words = []
-# tweet = []
-# i = 0
-# print('lendo\n')
-# with open('bolsonaro_treino2.csv', mode='r', encoding='utf-8') as csvfile:
-#     readCSV = csv.reader(csvfile)
-#     for row in readCSV:
-#         tweets.append(row[0])
-#         tweet = word_tokenize(row[0])
-#         for word in tweet:
-#             all_words.append(word)
-
-# def extract_features(tweet):
-#     tweet_words=set(tweet)
-#     features={}
-#     for word in word_features:
-#         features['contains(%s)' % word]=(word in tweet_words)
-#     return features 
-
-# print('montando palavras')
-# wordlist = nltk.FreqDist(all_words)
-# word_features = wordlist.keys()
-
-# print('treinando')
-# trainingFeatures=nltk.classify.apply_features(extract_features,tweets)
-
-# print(trainingFeatures)
-
-# NBayesClassifier=nltk.NaiveBayesClassifier.train(trainingFeatures)
-
-# print('label')
-
-# NBResultLabels = [NBayesClassifier.classify(extract_features(tweet[0])) for tweet in tweets]
-
-
-# print('analisando resultado')
-# if NBResultLabels.count('positive') > NBResultLabels.count('negative'):
-#     print("Overall Positive Sentiment")
-#     print("Positive Sentiment Percentage = " + str(100*NBResultLabels.count('positive')/len(NBResultLabels)) + "%")
-# else: 
-#     print("Overall Negative Sentiment")
-#     print("Negative Sentiment Percentage = " + str(100*NBResultLabels.count('negative')/len(NBResultLabels)) + "%")
-
+print('escrevendo treino\n')
+with open('a.csv', mode='w', encoding='utf-8', newline='') as csvfile:
+    writeCSV = csv.writer(csvfile)
+    i = 0
+    while (i < len(tweets)):
+        writeCSV.writerow([tweets[i]])
+        i = i + 1
+print('treino escrito\n')
