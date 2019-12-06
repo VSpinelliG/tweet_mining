@@ -568,22 +568,22 @@ def load_dict_smileys():
         }
 
 def processTweet(tweet):
-    # tweet = tweet.lower() # convert text to lower-case
-    # tweet = re.sub('((www\.[^\s]+)|(https?://[^\s]+))', '', tweet) # remove URLs
-    # tweet = re.sub('@[^\s]+', '', tweet) # remove usernames
-    # # tweet = re.sub(r'#([^\s]+)', r'\1', tweet) # remove the # in #hashtag
-    # tweet = re.sub('#([^\s]+)', '', tweet) # remove the # in #hashtag
-    # tweet = re.sub('kk+k*', '', tweet) # remove risada (kkk)
+    tweet = tweet.lower() # convert text to lower-case
+    tweet = re.sub('((www\.[^\s]+)|(https?://[^\s]+))', ' ', tweet) # remove URLs
+    tweet = re.sub('@[^\s]+', ' ', tweet) # remove usernames
+    # tweet = re.sub(r'#([^\s]+)', r'\1', tweet) # remove the # in #hashtag
+    tweet = re.sub('#([^\s]+)', ' ', tweet) # remove the # in #hashtag
+    tweet = re.sub('kk+k*', ' ', tweet) # remove risada (kkk)
     
-    # SMILEY = load_dict_smileys()  
-    # words = tweet.split()
-    # reformed = [SMILEY[word] if word in SMILEY else word for word in words]
-    # tweet = " ".join(reformed)
-    # tweet = emoji.demojize(tweet)
-    # # tweet = tweet.replace(":"," ")
-    # tweet = re.sub(':[^\s]*:+', '', tweet) #remove emoji 
+    SMILEY = load_dict_smileys()  
+    words = tweet.split()
+    reformed = [SMILEY[word] if word in SMILEY else word for word in words]
+    tweet = " ".join(reformed)
+    tweet = emoji.demojize(tweet)
+    # tweet = tweet.replace(":"," ")
+    tweet = re.sub(':[^\s]*:+', '', tweet) #remove emoji 
     
-    # tweet = ' '.join(tweet.split())
+    tweet = ' '.join(tweet.split())
     tweet = word_tokenize(tweet)
     tweet = [word for word in tweet if word not in stopwords]
     new_tweet = ''
@@ -593,47 +593,30 @@ def processTweet(tweet):
     # return tweet
 
 def removeDuplicates():
-    with open('bolsonaro_teste2.csv','r', encoding="utf-8") as f, open('a1.csv','w', encoding="utf-8") as out_file:
+    with open('neymar.csv','r', encoding="utf-8") as f, open('neymar2.csv','w', encoding="utf-8") as out_file:
         out_file.writelines(unique_everseen(f))
 
-# removeDuplicates()
-#-----------------------------------------------
+removeDuplicates()
+# -----------------------------------------------
 
-tweets = []
-# processedTweets = []
+# tweets = []
 
-print('lendo arquivo e fazendo preprocessamento\n')
-with open('a1.csv', encoding='utf-8') as csvfile:
-    readCSV = csv.reader(csvfile)
-    for row in readCSV:
-        aux = ' '.join(row)
-        if len(aux) > 25:
-            tweets.append(processTweet(aux))
-            # tweets.append(normalize('NFKD', aux).encode('ASCII', 'ignore').decode('ASCII'))
-print('preprocessamento terminado')
-
-# print(len(tweets))
-
-# quantidade_total = len(tweets)
-# qtd_treino = int(len(tweets) * 0.75)
-# tweets_treino = []
-# tweets_teste = []
-
-# print('separando o arquivo para treino e teste')
-# for indice in range(1, quantidade_total):
-#     if indice < qtd_treino:
-#         tweets_treino.append(tweets[indice])
-#     else:
-#         tweets_teste.append(tweets[indice])
-# print('separação concluida')
+# print('lendo arquivo e fazendo preprocessamento\n')
+# with open('neymar3.csv', encoding='utf-8') as csvfile:
+#     readCSV = csv.reader(csvfile)
+#     for row in readCSV:
+#         aux = ' '.join(row)
+#         tweets.append(processTweet(aux))
+#         # tweets.append(normalize('NFKD', aux).encode('ASCII', 'ignore').decode('ASCII'))
+# print('preprocessamento terminado')
 
 
-print('escrevendo\n')
-with open('a2.csv', mode='w', encoding='utf-8', newline='') as csvfile:
-    writeCSV = csv.writer(csvfile)
-    i = 0
-    while (i < len(tweets)):
-        writeCSV.writerow([tweets[i]])
-        # print('w: ',i)
-        i = i + 1
-print('escrito\n')
+# print('escrevendo\n')
+# with open('neymar2.csv', mode='w', encoding='utf-8', newline='') as csvfile:
+#     writeCSV = csv.writer(csvfile)
+#     i = 0
+#     while (i < len(tweets)):
+#         writeCSV.writerow([tweets[i]])
+#         # print('w: ',i)
+#         i = i + 1
+# print('escrito\n')

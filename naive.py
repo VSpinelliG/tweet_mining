@@ -1,5 +1,9 @@
+# Code developed by Gabriel Schade and adapted by Vinicius Spinelli
+# (https://gabrielschade.github.io/2018/04/16/machine-learning-classificador.html)
+
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import BernoulliNB
+from sklearn.metrics import accuracy_score
 import csv
 
 def exibir_resultado(valor):
@@ -12,26 +16,12 @@ def analisar_frase(classificador, vetorizador, frase):
 
 def obter_dados_das_fontes():
     dados = []
-    print('lendo arquivo e fazendo preprocessamento\n')
-    with open('c.csv', encoding='utf-8') as csvfile:
+    with open('neymar3.csv', encoding='utf-8') as csvfile:
         readCSV = csv.reader(csvfile)
         for row in readCSV:
-            dados.append(row[0])
-    print('preprocessamento terminado')
-
+            aux = ' '.join(row)
+            dados.append(aux)
     return dados
-#     diretorio_base = "C:\\Users\\re035148\\Documents\\I.A\\sentiment labelled sentences\\"
-
-#     with open(diretorio_base + "imdb_labelled.txt", "r") as arquivo_texto:
-#         dados = arquivo_texto.read().split('\n')
-         
-#     with open(diretorio_base + "amazon_cells_labelled.txt", "r") as arquivo_texto:
-#         dados += arquivo_texto.read().split('\n')
-
-#     with open(diretorio_base + "yelp_labelled.txt", "r") as arquivo_texto:
-#         dados += arquivo_texto.read().split('\n')
-
-#     return dados
 
 def tratamento_dos_dados(dados):
     dados_tratados = []
@@ -83,7 +73,7 @@ def realizar_avaliacao_simples(registros_para_avaliacao):
 
     return acertos * 100 / total
 
-def realizar_avaliacao_completa(registros_para_avaliacao):
+def realizar_avaliacao_completa(registros_para_avaliacao, classificador):
     avaliacao_comentarios = [registro_avaliacao[0] for registro_avaliacao in registros_para_avaliacao]
     avaliacao_respostas   = [registro_avaliacao[1] for registro_avaliacao in registros_para_avaliacao]
 
@@ -93,9 +83,11 @@ def realizar_avaliacao_completa(registros_para_avaliacao):
     falsos_positivos = 0
     falsos_negativos = 0
 
+    a = []
     for indice in range(0, total):
         resultado_analise = analisar_frase(classificador, vetorizador, avaliacao_comentarios[indice])
         frase, resultado = resultado_analise
+        a.append(resultado)
         if resultado[0] == '0':
             verdadeiros_negativos += 1 if avaliacao_respostas[indice] == '0' else 0
             falsos_negativos += 1 if avaliacao_respostas[indice] != '0' else 0
@@ -103,6 +95,8 @@ def realizar_avaliacao_completa(registros_para_avaliacao):
             verdadeiros_positivos += 1 if avaliacao_respostas[indice] == '1' else 0
             falsos_positivos += 1 if avaliacao_respostas[indice] != '1' else 0
 
+    print('acuracia: ', accuracy_score(avaliacao_respostas, a))
+    
     return ( verdadeiros_positivos * 100 / total, 
              verdadeiros_negativos * 100 / total,
              falsos_positivos * 100 / total,
@@ -113,14 +107,15 @@ registros_de_treino, registros_para_avaliacao = pre_processamento()
 vetorizador = CountVectorizer(binary = 'true')
 classificador = realizar_treinamento(registros_de_treino, vetorizador)
 
-exibir_resultado( analisar_frase(classificador, vetorizador,"bolsonaro deu show"))
-exibir_resultado( analisar_frase(classificador, vetorizador,"bolsonaro realiza um discurso cheio de ódio"))
-exibir_resultado( analisar_frase(classificador, vetorizador,"eu nao aguento mais o bolsonaro que homem escroto meu deus"))
-exibir_resultado( analisar_frase(classificador, vetorizador,"bolsonaro foi bem"))
-exibir_resultado( analisar_frase(classificador, vetorizador,"estamos orgulhosos do presidente"))
+exibir_resultado( analisar_frase(classificador, vetorizador,"menino ney e craque"))
+exibir_resultado( analisar_frase(classificador, vetorizador,"neymar joga demais"))
+exibir_resultado( analisar_frase(classificador, vetorizador,"neymar e um menino mimado"))
+exibir_resultado( analisar_frase(classificador, vetorizador,"neymar e um cara incrivel"))
+exibir_resultado( analisar_frase(classificador, vetorizador,"neymar e uma pessoa horrivel"))
 
 percentual_acerto = realizar_avaliacao_simples(registros_para_avaliacao)
-informacoes_analise = realizar_avaliacao_completa(registros_para_avaliacao)
+
+informacoes_analise = realizar_avaliacao_completa(registros_para_avaliacao, classificador)
 
 verdadeiros_positivos,verdadeiros_negativos,falsos_positivos,falsos_negativos = informacoes_analise
 
@@ -131,5 +126,3 @@ print("e", verdadeiros_negativos, "% são verdadeiros negativos")
 
 print("e", falsos_positivos, "% são falsos positivos")
 print("e", falsos_negativos, "% são falsos negativos")
-
-
